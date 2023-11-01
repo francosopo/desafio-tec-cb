@@ -1,8 +1,18 @@
 import {ExceptionInterface} from "./interfaces/exception.interface";
+import {HttpException} from "@nestjs/common";
 
-export class BaseException extends Error implements ExceptionInterface
+export class BaseException extends HttpException implements ExceptionInterface
 {
-    constructor(msg: string) {
-        super(msg);
+    constructor(msg: string, statusCode: number) {
+        super(msg, statusCode);
+    }
+
+    getMessage(): string
+    {
+        return this.message
+    }
+
+    getStatus(): number {
+        return super.getStatus();
     }
 }

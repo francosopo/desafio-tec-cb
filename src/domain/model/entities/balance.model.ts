@@ -11,6 +11,9 @@ export class Balance
     @JoinColumn()
     user: Users;
 
-    @Column()
+    @Column({
+        type:"float",
+        default:0
+    })
     balance: number;
 }

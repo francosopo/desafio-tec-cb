@@ -5,8 +5,6 @@ import {AssertPaymentService} from "../helpers/assert.payment.service";
 import {RequestStatusService} from "../helpers/request.status.service";
 import {HttpService} from "@nestjs/axios";
 import {PaymentStateServiceInterface} from "../interfaces/payment.state.service.interface";
-import {ErrorResponseState} from "./error.response.state";
-import {RepositoryInterface} from "../../model/repositories/interfaces/repository.interface";
 import {EntityTarget, Repository} from "typeorm";
 
 export class SuccessfulResponseState extends AbstractPaymentState implements PaymentInterface
@@ -35,12 +33,18 @@ export class SuccessfulResponseState extends AbstractPaymentState implements Pay
             baseUrl);
     }
     async run<T>(transferCode: string, amount: number, token: string): Promise<PaymentResponseInterface> {
+            /*await this.getTransactionRepository().save({
+                from: transferCode,
+                amount:amount,
+                status:"Done"
+            })*/
             this.setResponseStatusForSendingToUser(202);
-            this.setMessageForSendingToUser("Successfully executed")
+            this.setMessageForSendingToUser("success")
             return {
+                transferCode: transferCode,
                 status: this.getResponseStatusForSendingToUser(),
                 message:this.getMessageForSendingToUser(),
-                details: "success"
+                details: "Executed successfully"
             }
     }
 

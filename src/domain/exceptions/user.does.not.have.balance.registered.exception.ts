@@ -1,8 +1,8 @@
 import {BaseException} from "./base.exception";
 
-export class UserDoesNotHaveBalanceRegisteredException extends BaseException
+export class UserDoesNotHaveBalanceException extends BaseException
 {
     constructor(msg: string) {
-        super(msg);
+        super(msg, 400);
     }
 }

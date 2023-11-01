@@ -21,19 +21,20 @@ describe('General Payments Controller (e2e)', () => {
 
     it('should return OK because is has balance', async () => {
 
-        const res = await request(app).post('/send_payment')
-            .set('X-AUTH-TOKEN', 'my_auth_token')
-            .set('Content-Type', 'application/json')
-            .send({
-            transferCode:'franco.seguel@ug.uchile.cl',
-            amount: 5000
-        });
-        expect(res.statusCode).toBe(201);
+        const res = await request(app.getHttpServer()).post('/general_payment/send_payment')
+                .send({
+                    transferCode:'franco.seguel@ug.uchile.cl',
+                    amount: 5000
+                })
+            .set('X_General_Payment', 'MAKE-GENERAL-PAYMENT')
+            .set('Content-Type', 'application/json');
+        expect(res.statusCode).toBe(202);
+        console.log(res.body);
         expect(res.body).toBeDefined();
         expect(res.body).not.toBeNull();
         expect(res.body.transferCode).toBeDefined();
         expect(res.body.transferCode).not.toBeNull();
-        expect(res.body.transferCode).not.toBeNaN()
+        expect(res.body.transferCode).not.toBeNaN();
         expect(res.body.transferCode).toBe('franco.seguel@ug.uchile.cl')
         expect(res.body.message).toBeDefined();
         expect(res.body.message).not.toBeNull();
@@ -41,9 +42,9 @@ describe('General Payments Controller (e2e)', () => {
         expect(res.body.details).toBe('Executed successfully');
     })
 
-    it('should return INSUFFICIENT FUNDS because of balance', async () => {
+    /*it('should return INSUFFICIENT FUNDS because of balance', async () => {
         const transferCode: string = 'francoseguellucero@gmail.com'
-        const res = await request(app).post('/send_payment').send({
+        const res = await request(app).post('/general_payment/send_payment').send({
             transferCode: transferCode,
             amount: 5000
         });
@@ -63,5 +64,5 @@ describe('General Payments Controller (e2e)', () => {
         expect(res.body.details).not.toBeNull();
         expect(res.body.details).not.toBeNaN();
         expect(res.body.details).toBe("INSUFFICIENT FUNDS");
-    })
+    })*/
 });

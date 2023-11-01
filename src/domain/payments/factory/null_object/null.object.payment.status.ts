@@ -25,9 +25,10 @@ export class NullObjectPaymentStatus implements PaymentStatusInterface
         return this.obj;
     }
 
-    process(status: PaymentInterface, e: EntityTarget<any>, token: string): Promise<PaymentResponseInterface> {
-        return Promise.resolve({status:0,
-        message:"",
-        details:""});
+    process(status: PaymentInterface, token: string): Promise<PaymentResponseInterface> {
+        return Promise.resolve({status:500,
+        message:"Object null",
+        details:"Null payment status",
+        transferCode:status.getTransferCode()});
     }
 }

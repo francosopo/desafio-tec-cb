@@ -7,10 +7,6 @@ import {PreparingRequestState} from "./preparing.request.state";
 import {PaymentStateServiceInterface} from "../interfaces/payment.state.service.interface";
 import {HttpService} from "@nestjs/axios";
 import {Injectable, Scope} from "@nestjs/common";
-import {RepositoryInterface} from "../../model/repositories/interfaces/repository.interface";
-import {InjectRepository} from "@nestjs/typeorm";
-import {PaymentsToGeneralPaymentsRepository} from "../../model/repositories/payments.to.general.payments.repository";
-import {PaymentsToGeneralPayment} from "../../model/entities/payments.to.general.payment.model";
 import {Repository} from "typeorm";
 
 @Injectable({

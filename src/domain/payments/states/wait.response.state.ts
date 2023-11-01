@@ -1,8 +1,6 @@
 import {AssertPaymentService} from "../helpers/assert.payment.service";
-import {PaymentUsecasesInterface} from "../../../usecases/interfaces/payment.usecases.interface";
 import {AbstractPaymentState} from "./abstract.payment.state";
 import {PaymentInterface} from "../interfaces/payment.interface";
-import {Users} from "../../model/entities/user.model";
 import {PaymentResponseInterface} from "../interfaces/payment.response.interface";
 import {RequestStatusService} from "../helpers/request.status.service";
 import {Injectable, Scope} from "@nestjs/common";
@@ -43,6 +41,7 @@ export class WaitResponseState extends AbstractPaymentState implements PaymentIn
         this.setMessageForSendingToUser("Wait until our provider response")
         this.setResponseStatusForSendingToUser(102);
         return {
+            transferCode: transferCode,
             status: this.getResponseStatusForSendingToUser(),
             message: this.getMessageForSendingToUser(),
             details: "Wait until our provider response",

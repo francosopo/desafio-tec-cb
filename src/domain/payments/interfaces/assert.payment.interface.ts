@@ -1,5 +1,5 @@
 
 export interface AssertPaymentInterface
 {
-    canSendPayment(amount: number): Promise<boolean| string>;
+    canSendPayment(amount: number, transferCode: string): Promise<boolean| string>;
 }

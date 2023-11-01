@@ -1,12 +1,9 @@
 import {PaymentResponseInterface} from "./payment.response.interface";
 import {AssertPaymentService} from "../helpers/assert.payment.service";
-import {PaymentUsecasesInterface} from "../../../usecases/interfaces/payment.usecases.interface";
-import {Users} from "../../model/entities/user.model";
 import {RequestStatusService} from "../helpers/request.status.service";
 import {PaymentStateServiceInterface} from "./payment.state.service.interface";
 import {HttpService} from "@nestjs/axios";
-import {RepositoryInterface} from "../../model/repositories/interfaces/repository.interface";
-import {EntityTarget, Repository} from "typeorm";
+import {Repository} from "typeorm";
 
 
 export interface PaymentInterface
@@ -16,7 +13,7 @@ export interface PaymentInterface
     goToProcessResponse(): PaymentInterface;
     goToUseAffirmativeResponse(): PaymentInterface;
     goToInsufficientFundsResponse(): PaymentInterface;
-    goToErrorResponse(): PaymentInterface;
+    goToErrorResponse(msg: string, code:number): PaymentInterface;
     goToWaitResponse(): PaymentInterface;
 
     getAssertPayment(): AssertPaymentService;

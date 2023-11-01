@@ -1,10 +1,15 @@
 import {Module} from "@nestjs/common";
-import {FactoryDatabasePaymentStatus} from "./factory.database.payment.status";
-import {RepositoryModule} from "../../model/repositories/repository.module";
+import {FactoryDatabasePaymentStatusService} from "./factory.database.payment.status.service";
+import {TypeOrmModule} from "@nestjs/typeorm";
+import {PaymentsToGeneralPayment} from "../../model/entities/payments.to.general.payment.model";
 
 @Module({
-    providers: [FactoryDatabasePaymentStatus],
-    imports: [RepositoryModule],
-    exports: [FactoryDatabasePaymentStatus]
+    imports:[
+        TypeOrmModule.forFeature([
+            PaymentsToGeneralPayment
+        ])
+    ],
+    providers: [FactoryDatabasePaymentStatusService],
+    exports: [FactoryDatabasePaymentStatusService]
 })
 export class FactoryModuleDatabase {}

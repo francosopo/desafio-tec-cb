@@ -1,15 +1,11 @@
 import {PaymentInterface} from "../interfaces/payment.interface";
-import {ErrorResponseState} from "./error.response.state";
 import {PaymentResponseInterface} from "../interfaces/payment.response.interface";
-import {PaymentUsecasesInterface} from "../../../usecases/interfaces/payment.usecases.interface";
 import {AssertPaymentService} from "../helpers/assert.payment.service";
-import {Users} from "../../model/entities/user.model";
 import {RequestStatusService} from "../helpers/request.status.service";
 import {PaymentStateServiceInterface} from "../interfaces/payment.state.service.interface";
 import {HttpService} from "@nestjs/axios";
-import {RepositoryInterface} from "../../model/repositories/interfaces/repository.interface";
-import {EntityTarget, Repository} from "typeorm";
-import {PaymentsToGeneralPayment} from "../../model/entities/payments.to.general.payment.model";
+import { Repository} from "typeorm";
+import {BaseException} from "../../exceptions/base.exception";
 
 export abstract class AbstractPaymentState implements PaymentInterface
 {
@@ -75,38 +71,28 @@ export abstract class AbstractPaymentState implements PaymentInterface
         this.responseStatusForSendingToUser = code;
     }
 
-    goToErrorResponse(): PaymentInterface {
-        return new ErrorResponseState(this.assertPayment,
-            this.requestStatusService,
-            this.httpService,
-            this.transactionRepository,
-            this.responseStatusFromGeneralPayment,
-            this.responseStatusForSendingToUser,
-            this.messageForSendingToUser,
-            this.context,
-            this.amount,
-            this.transferCode,
-            this.baseUrl);
+    goToErrorResponse(msg: string, code: number): PaymentInterface {
+        throw new BaseException(msg, code);
     }
 
     goToInsufficientFundsResponse(): PaymentInterface {
-        return this.goToErrorResponse();
+        return this.goToErrorResponse("", 500);
     }
 
     goToPreparingRequest(): PaymentInterface {
-        return this.goToErrorResponse();
+        return this.goToErrorResponse("", 500);
     }
 
     goToProcessResponse(): PaymentInterface {
-        return this.goToErrorResponse();
+        return this.goToErrorResponse("", 500);
     }
 
     goToSendRequest(): PaymentInterface {
-        return this.goToErrorResponse();
+        return this.goToErrorResponse("", 500);
     }
 
     goToUseAffirmativeResponse(): PaymentInterface {
-        return this.goToErrorResponse();
+        return this.goToErrorResponse("", 500);
     }
 
     abstract run<T>(transferCode: string, amount: number, token: string): Promise<PaymentResponseInterface>;
@@ -116,7 +102,7 @@ export abstract class AbstractPaymentState implements PaymentInterface
     }
 
     goToWaitResponse(): PaymentInterface {
-        return this.goToErrorResponse();
+        return this.goToErrorResponse("", 500);
     }
 
     getRequestStatusService(): RequestStatusService {

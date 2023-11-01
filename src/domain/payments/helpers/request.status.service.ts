@@ -1,34 +1,38 @@
-import {Injectable} from "@nestjs/common";
-import {BalanceRepository} from "../../model/repositories/balance.repository";
-import {Users} from "../../model/entities/user.model";
-import {PaymentsToGeneralPaymentsRepository} from "../../model/repositories/payments.to.general.payments.repository";
+import {Injectable, OnModuleInit} from "@nestjs/common";;
 import {PaymentsToGeneralPayment} from "../../model/entities/payments.to.general.payment.model";
 import {RequestStatusInterface} from "../interfaces/request.status.interface";
-import {FactoryDatabasePaymentStatus} from "../factory/factory.database.payment.status";
 import {PaymentStatusInterface} from "../factory/interfaces/payment.status.interface";
-import {response} from "express";
 import * as console from "console";
+import {Repository} from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
+import {FactoryDatabasePaymentStatusService} from "../factory/factory.database.payment.status.service";
+import {Done} from "../factory/objects/transaction.done";
+import {MakingPayment} from "../factory/objects/making.payment";
 
 @Injectable()
-export class RequestStatusService implements RequestStatusInterface
+export class RequestStatusService implements RequestStatusInterface, OnModuleInit
 {
-    constructor( private factoryService: FactoryDatabasePaymentStatus,
-        private paymentsToGeneralPaymentRepository: PaymentsToGeneralPaymentsRepository){}
-
+    constructor( private factoryService: FactoryDatabasePaymentStatusService,
+        @InjectRepository(PaymentsToGeneralPayment)
+        private paymentsToGeneralPaymentRepository: Repository<PaymentsToGeneralPayment>){}
+    onModuleInit(): any {
+        this.factoryService.registerObject("Done", Done);
+        this.factoryService.registerObject("MakingPayment",  MakingPayment);
+    }
     async getStatusService(transferCode: string, amount: number): Promise<PaymentStatusInterface>
     {
         try{
-            let response = await this.paymentsToGeneralPaymentRepository.getDataSource().getRepository(PaymentsToGeneralPayment).findOneBy({
-                id: transferCode,
+            let response = await this.paymentsToGeneralPaymentRepository.findOneBy({
+                from: transferCode,
                 amount: amount
             })
             if (response == null)
             {
-                if (!this.factoryService.existObject('Making payment'))
+                if (!this.factoryService.existObject('MakingPayment'))
                 {
-                    return this.factoryService.createObject('MakingPayment', 'Making payment');
+                    return this.factoryService.createObject('MakingPayment', 'MakingPayment');
                 }
-                return this.factoryService.createObject('MakingPayment', 'Making payment');
+                return this.factoryService.createObject('MakingPayment', 'MakingPayment');
             }
             if (!this.factoryService.existObject(response.status))
             {
@@ -42,11 +46,11 @@ export class RequestStatusService implements RequestStatusInterface
     }
 
     async setStatusService(transferCode: string, amount: number, state: string) {
-        let res = await this.paymentsToGeneralPaymentRepository.getDataSource().getRepository(PaymentsToGeneralPayment).findOneBy({
-            id: transferCode,
+        let res = await this.paymentsToGeneralPaymentRepository.findOneBy({
+            from: transferCode,
             amount: amount,
         })
         res.status = state;
-        await this.paymentsToGeneralPaymentRepository.getDataSource().getRepository(PaymentsToGeneralPayment).save(res);
+        await this.paymentsToGeneralPaymentRepository.save(res);
     }
 }

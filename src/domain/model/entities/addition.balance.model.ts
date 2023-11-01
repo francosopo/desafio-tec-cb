@@ -10,6 +10,9 @@ export class Payments
     @ManyToOne(() => Users, (user) =>user.payments)
     user: Users;
 
-    @Column()
+    @Column({
+        type:"float",
+        default:0
+    })
     amount: number;
 }

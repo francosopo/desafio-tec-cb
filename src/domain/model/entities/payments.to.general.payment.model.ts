@@ -1,15 +1,26 @@
-import {Column, Entity, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
+import {Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
 import {Users} from "./user.model";
 
 @Entity()
 export class PaymentsToGeneralPayment
 {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @Column()
+    @Column({
+        type:"varchar",
+        length:255
+    })
+    from: string
+
+    @Column({
+        type:"float"
+    })
     amount: number;
 
-    @Column()
+    @Column({
+        type:"varchar",
+        length:255
+    })
     status: string;
 }

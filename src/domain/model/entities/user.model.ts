@@ -1,7 +1,8 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne} from "typeorm";
 import {PaymentsToGeneralPayment} from "./payments.to.general.payment.model";
 import {Charges} from "./charges.model";
 import {Payments} from "./addition.balance.model";
+import {Balance} from "./balance.model";
 
 @Entity()
 export class Users
@@ -9,10 +10,16 @@ export class Users
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
-    @Column()
+    @Column({
+        type:"varchar",
+        length:255
+    })
     email: string;
 
-    @Column()
+    @Column({
+        type: "varchar",
+        length:255
+    })
     encryptedPassword: string
 
     @OneToMany(() => Charges,
@@ -22,4 +29,7 @@ export class Users
     @OneToMany(() => Payments,
         (payment) =>payment.amount)
     payments: Payments[]
+
+    @OneToOne(() => Balance)
+    balance: Balance[];
 }

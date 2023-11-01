@@ -3,20 +3,17 @@ import {PaymentInterface} from "../interfaces/payment.interface";
 import {PaymentResponseInterface} from "../interfaces/payment.response.interface";
 import {AssertPaymentService} from "../helpers/assert.payment.service";
 import {RequestStatusService} from "../helpers/request.status.service";
-import {Injectable, Scope} from "@nestjs/common";
-import {PaymentStateServiceInterface} from "../interfaces/payment.state.service.interface";
 import {HttpService} from "@nestjs/axios";
-import {Repository} from "typeorm";
+import {PaymentStateServiceInterface} from "../interfaces/payment.state.service.interface";
+import {EntityTarget, Repository} from "typeorm";
 
-@Injectable({
-    scope: Scope.REQUEST
-})
-export class ErrorResponseState extends AbstractPaymentState implements PaymentInterface {
+export class TransactionDoneState extends AbstractPaymentState implements PaymentInterface
+{
     constructor(assertPayment: AssertPaymentService,
                 requestStatus: RequestStatusService,
                 httpService: HttpService,
                 transactionRepository: Repository<any>,
-                responseFromGeneralPayments: number,
+                responseFromExternalPayments: number,
                 responseStatusForSendingToUser: number,
                 messageToSendToUser: string,
                 context: PaymentStateServiceInterface,
@@ -27,7 +24,7 @@ export class ErrorResponseState extends AbstractPaymentState implements PaymentI
             requestStatus,
             httpService,
             transactionRepository,
-            responseFromGeneralPayments,
+            responseFromExternalPayments,
             responseStatusForSendingToUser,
             messageToSendToUser,
             context,
@@ -35,13 +32,15 @@ export class ErrorResponseState extends AbstractPaymentState implements PaymentI
             transferCode,
             baseUrl);
     }
-
-    async run(transferCode: string, amount :number): Promise<PaymentResponseInterface> {
+    async run<T>(transferCode: string, amount: number, token: string): Promise<PaymentResponseInterface> {
+        this.setResponseStatusForSendingToUser(200);
+        this.setMessageForSendingToUser("This transaction is already done")
         return {
             transferCode: transferCode,
             status: this.getResponseStatusForSendingToUser(),
-            message: "Cannot process your request",
-            details: this.getMessageForSendingToUser()
+            message:this.getMessageForSendingToUser(),
+            details: "Already done"
         }
     }
+
 }

@@ -3,16 +3,20 @@ import {PaymentStatusInterface} from "../interfaces/payment.status.interface";
 import {PaymentInterface} from "../../interfaces/payment.interface";
 import {PaymentResponseInterface} from "../../interfaces/payment.response.interface";
 import {SendRequestState} from "../../states/send.request.state";
-import {PaymentsToGeneralPaymentsRepository} from "../../../model/repositories/payments.to.general.payments.repository";
-import {RepositoryInterface} from "../../../model/repositories/interfaces/repository.interface";
-import {EntityTarget} from "typeorm";
+import {Repository} from "typeorm";
 
 export class MakingPayment extends AbstractPaymentDatabaseStatus implements PaymentStatusInterface
 {
-    constructor(status: string) {
-        super("Pending payment");
+    constructor(status: string,
+                private paymentRepository: Repository<any>) {
+        super(status);
     }
     async process(status: PaymentInterface, token: string): Promise<PaymentResponseInterface> {
+        await this.paymentRepository.save({
+            from: status.getTransferCode(),
+            amount: status.getAmount(),
+            status: this.getStatus(),
+        })
         status.getContext().setState(new SendRequestState(
             status.getAssertPayment(),
             status.getRequestStatusService(),

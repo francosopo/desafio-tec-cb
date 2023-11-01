@@ -1,19 +1,16 @@
 import {AbstractPaymentState} from "./abstract.payment.state";
 import {PaymentInterface} from "../interfaces/payment.interface";
 import {PaymentResponseInterface} from "../interfaces/payment.response.interface";
-import {PaymentUsecasesInterface} from "../../../usecases/interfaces/payment.usecases.interface";
+
 import {Injectable, Scope} from "@nestjs/common";
 import {AssertPaymentService} from "../helpers/assert.payment.service";
-import {Users} from "../../model/entities/user.model";
 import {SendRequestState} from "./send.request.state";
 import {WaitResponseState} from "./wait.response.state";
-import {RequestGeneralPaymentStateInterface} from "../interfaces/request.general.payment.state.interface";
 import {RequestStatusService} from "../helpers/request.status.service";
 import {PaymentStatusInterface} from "../factory/interfaces/payment.status.interface";
 import {PaymentStateServiceInterface} from "../interfaces/payment.state.service.interface";
 import {HttpService} from "@nestjs/axios";
-import {RepositoryInterface} from "../../model/repositories/interfaces/repository.interface";
-import {EntityTarget, Repository} from "typeorm";
+import { Repository} from "typeorm";
 
 @Injectable({scope:Scope.REQUEST})
 export class PreparingRequestState extends AbstractPaymentState implements PaymentInterface
@@ -42,10 +39,10 @@ export class PreparingRequestState extends AbstractPaymentState implements Payme
             baseUrl);
     }
     async run<T>(transferCode: string, amount: number, token: string): Promise<PaymentResponseInterface> {
-        const canDoPayment: boolean = await this.getAssertPayment().canSendPayment(this.getAmount())
+        const canDoPayment: boolean = await this.getAssertPayment().canSendPayment(this.getAmount(), transferCode)
         if (canDoPayment == false)
         {
-            this.getContext().setState(this.goToErrorResponse())
+            this.getContext().setState(this.goToErrorResponse("Cannot do payment", 400))
             return this.getContext().getState().run(transferCode, amount, token)
         }
 
@@ -72,6 +69,7 @@ export class PreparingRequestState extends AbstractPaymentState implements Payme
         return new WaitResponseState(this.getAssertPayment(),
             this.getRequestStatusService(),
             this.getHttpService(),
+            this.getTransactionRepository(),
             this.getResponseStatusFromGeneralPayments(),
             this.getResponseStatusForSendingToUser(),
             this.getMessageForSendingToUser(),
