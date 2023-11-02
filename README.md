@@ -41,7 +41,9 @@ POSTGRES_DB=your_database_name
 ```
 
 Then, create a user, a database with the configurations shown above, and grant all privileges on
-the database to the user you created.
+the database to the user you created and permit login.
+
+/* SET THE LISTEN ADDRESSES AS LOCALHOST */
 
 Later, set the following configuration into your .env.local
 
@@ -51,19 +53,6 @@ HASHING_SALT=your_hashing_salt
 ```
 
 Next, add the header config to the .env.local file as I told you in the email.
-
-Finally, create a user with enough balance, this is because I decided to do that verification.
-Besides, the token is kept by the server and updated dynamically. The endpoint to create a user with
-enough balance is "/users/sign_up" and the payload is, as example
-```json
-{
-  email: 'franco.seguel@ug.uchile.cl',
-  password: 'mi_password_s3cr3t4',
-  balance: 9000
-}
-```
-One important thing is that the transferCode is also used to identify the user that makes the payment.
-Since is not in the usecase, you can do a payment only with a valid "transferCode" parameter
 
 
 Then, run
@@ -98,15 +87,18 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Finally, create a user with enough balance, this is because I decided to do that verification.
+Besides, the token is kept by the server and updated dynamically. The endpoint to create a user with
+enough balance is "/users/sign_up" and the payload is, as example
+```json
+{
+  email: 'franco.seguel@ug.uchile.cl',
+  password: 'mi_password_s3cr3t4',
+  balance: 9000
+}
+```
+One important thing is that the transferCode is also used to identify the user that makes the payment.
+Since is not in the usecase, you can do a payment only with a valid "transferCode" parameter
 
 ## License
 
