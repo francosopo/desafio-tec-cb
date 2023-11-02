@@ -14,23 +14,23 @@ export class PostgresDatabase implements DatabaseInterface
     constructor(private configService: ConfigService) {
     }
     getDatabaseHost(): string {
-        return this.configService.get<string>('DATABASE_HOST');
+        return this.configService.get<string>('POSTGRES_HOST');
     }
 
     getDatabaseName(): string {
-        return this.configService.get<string>('DATABASE_NAME');
+        return this.configService.get<string>('POSTGRES_DB');
     }
 
     getDatabasePassword(): string {
-        return this.configService.get<string>('DATABASE_PASSWORD');
+        return this.configService.get<string>('POSTGRES_PASSWORD');
     }
 
     getDatabasePort(): string {
-        return this.configService.get<string>('DATABASE_PORT');
+        return this.configService.get<string>('POSTGRES_PORT');
     }
 
     getDatabaseUser(): string {
-        return this.configService.get<string>('DATABASE_USER');
+        return this.configService.get<string>('POSTGRES_USER');
     }
 
 }

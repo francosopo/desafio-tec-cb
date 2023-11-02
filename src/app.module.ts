@@ -17,11 +17,11 @@ import {UsersModule} from "./infrastructure/users/users.module";
 @Module({
   imports: [TypeOrmModule.forRoot({
     type:'postgres',
-    host: process.env.DATABASE_HOST,
-    port: parseInt(process.env.DATABASE_PORT),
-    username:process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME,
+    host: process.env.POSTGRES_HOST,
+    port: parseInt(process.env.POSTGRES_PORT),
+    username:process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_NAME,
     synchronize:true,
     entities:[
         Payments,

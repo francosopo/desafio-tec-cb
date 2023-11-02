@@ -28,6 +28,44 @@
 
 ## Installation
 
+1.-Install PostgreSQL with version 16
+
+2.- Create an .env.local configuration file with the following parameters:
+
+```editorconfig
+DATABASE_HOST=http://url.of.your.database.com
+DATABASE_PORT=5432
+DATABASE_USER=your_user
+DATABASE_PASSWORD=y0ur_s3cr3t_p4ss
+DATABASE_NAME=your_database_name
+```
+
+Then, create a user, a database with the configurations shown above, and grant all privileges on
+the database and the user you created.
+
+Later, set the following configuration into your .env.local
+
+```editorconfig
+GENERAL_PAYMENT_BASE_URL=http://the.url.to.your.payment.com
+HASHING_SALT=10
+```
+
+Finally, create a user with enough balance, this is because I decided to do that verification.
+Besides, the token is kept by the server and updated dynamically. The endpoint to create a user with
+enough balance is "/users/sign_up" and the payload is, as example
+```json
+{
+  email: 'franco.seguel@ug.uchile.cl',
+  password: 'mi_password_s3cr3t4',
+  balance: 9000
+}
+```
+One important thing is that the transferCode is also used to identify the user that makes the payment.
+Since is not in the usecase, you can do a payment only with a valid "transferCode" parameter
+
+
+Then, run
+
 ```bash
 $ npm install
 ```
