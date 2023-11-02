@@ -41,7 +41,7 @@ POSTGRES_DB=your_database_name
 ```
 
 Then, create a user, a database with the configurations shown above, and grant all privileges on
-the database and the user you created.
+the database to the user you created.
 
 Later, set the following configuration into your .env.local
 
@@ -49,6 +49,8 @@ Later, set the following configuration into your .env.local
 GENERAL_PAYMENT_BASE_URL=http://the.url.to.your.payment.com
 HASHING_SALT=your_hashing_salt
 ```
+
+Next, add the header config to the .env.local file as I told you in the email.
 
 Finally, create a user with enough balance, this is because I decided to do that verification.
 Besides, the token is kept by the server and updated dynamically. The endpoint to create a user with
