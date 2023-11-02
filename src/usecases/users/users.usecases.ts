@@ -8,16 +8,19 @@ export class UsersUsecases
     constructor(private usersService: UsersService) {}
     noBalance(email: string)
     {
+        console.log("There is no balance provided")
         throw new NoBalanceProvided("No balance provided");
     }
 
     noEmail(email:string)
     {
+        console.log("There is no email provided")
         throw new NoEmailProvided("No email provided");
     }
 
     noPassword(email: string)
     {
+        console.log("No password provided")
         throw new NoPasswordProvided("No password provided");
     }
 
