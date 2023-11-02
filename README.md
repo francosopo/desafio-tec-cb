@@ -47,7 +47,7 @@ Later, set the following configuration into your .env.local
 
 ```editorconfig
 GENERAL_PAYMENT_BASE_URL=http://the.url.to.your.payment.com
-HASHING_SALT=10
+HASHING_SALT=your_hashing_salt
 ```
 
 Finally, create a user with enough balance, this is because I decided to do that verification.
