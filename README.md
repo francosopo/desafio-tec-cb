@@ -33,11 +33,11 @@
 2.- Create an .env.local configuration file with the following parameters:
 
 ```editorconfig
-DATABASE_HOST=http://url.of.your.database.com
-DATABASE_PORT=5432
-DATABASE_USER=your_user
-DATABASE_PASSWORD=y0ur_s3cr3t_p4ss
-DATABASE_NAME=your_database_name
+POSTGRES_HOST=http://url.of.your.database.com
+POSTGRES_PORT=5432
+POSTGRES_USER=your_user
+POSTGRES_PASSWORD=y0ur_s3cr3t_p4ss
+POSTGRES_DB=your_database_name
 ```
 
 Then, create a user, a database with the configurations shown above, and grant all privileges on
