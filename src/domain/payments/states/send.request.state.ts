@@ -10,6 +10,9 @@ import {ErrorResponseState} from "./error.response.state";
 import {SuccessfulResponseState} from "./successful.response.state";
 import {EntityTarget, Repository} from "typeorm";
 import {PaymentsToGeneralPayment} from "../../model/entities/payments.to.general.payment.model";
+import {Users} from "../../model/entities/user.model";
+import {Charges} from "../../model/entities/charges.model";
+import {Balance} from "../../model/entities/balance.model";
 
 @Injectable({
     scope: Scope.REQUEST
@@ -20,6 +23,9 @@ export class SendRequestState extends AbstractPaymentState implements PaymentInt
                 requestStatus: RequestStatusService,
                 httpService: HttpService,
                 transactionObject: Repository<any>,
+                userRepository: Repository<Users>,
+                chargesRepository: Repository<Charges>,
+                balancesRespository: Repository<Balance>,
                 responseFromGeneralPayments: number,
                 responseStatusForSendingToUser: number,
                 messageToSendToUser: string,
@@ -31,6 +37,9 @@ export class SendRequestState extends AbstractPaymentState implements PaymentInt
             requestStatus,
             httpService,
             transactionObject,
+            userRepository,
+            chargesRepository,
+            balancesRespository,
             responseFromGeneralPayments,
             responseStatusForSendingToUser,
             messageToSendToUser,
@@ -62,6 +71,20 @@ export class SendRequestState extends AbstractPaymentState implements PaymentInt
                 paymentFromDatabase.status = "Done"
                 await manager.getRepository(PaymentsToGeneralPayment).save(paymentFromDatabase);
                 response_status = response.status;
+                const user: Users= await this.getUserRepository().findOneBy({
+                    email: transferCode
+                })
+                const userCharges:Charges = new Charges();
+                const userBalance: Balance = await this.getBalanceRepository().findOneBy({
+                    user:user
+                })
+
+                userCharges.amount = amount
+                userCharges.timestamp = new Date().toISOString()
+                await this.getChargesRespitory().save(userCharges)
+                userBalance.balance = userBalance.balance - amount;
+                await this.getBalanceRepository().save(userBalance);
+
             })
         if (response_status != 200)
         {
@@ -72,6 +95,9 @@ export class SendRequestState extends AbstractPaymentState implements PaymentInt
                 this.getRequestStatusService(),
                 this.getHttpService(),
                 this.getTransactionRepository(),
+                this.getUserRepository(),
+                this.getChargesRespitory(),
+                this.getBalanceRepository(),
                 this.getResponseStatusFromGeneralPayments(),
                 this.getResponseStatusForSendingToUser(),
                 this.getMessageForSendingToUser(),
@@ -86,6 +112,9 @@ export class SendRequestState extends AbstractPaymentState implements PaymentInt
             this.getRequestStatusService(),
             this.getHttpService(),
             this.getTransactionRepository(),
+            this.getUserRepository(),
+            this.getChargesRespitory(),
+            this.getBalanceRepository(),
             this.getResponseStatusFromGeneralPayments(),
             this.getResponseStatusForSendingToUser(),
             this.getMessageForSendingToUser(),

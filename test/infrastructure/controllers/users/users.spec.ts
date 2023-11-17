@@ -23,6 +23,7 @@ describe('final user test',  () => {
         const res = await request(app.getHttpServer())
             .post('/users/sign_up')
             .set('Content-Type', 'application/json')
+            .set("x_the_sign_up_headder","THIS_IS_THE_SIGNUP_HEADDER_D")
             .send({
                 email: 'franco.seguel@ug.uchile.cl',
                 password: 'mi_password_s3cr3t4',

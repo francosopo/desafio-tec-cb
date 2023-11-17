@@ -8,6 +8,10 @@ import {PaymentStateServiceInterface} from "../interfaces/payment.state.service.
 import {HttpService} from "@nestjs/axios";
 import {Injectable, Scope} from "@nestjs/common";
 import {Repository} from "typeorm";
+import {Users} from "../../model/entities/user.model";
+import {run} from "jest";
+import {Charges} from "../../model/entities/charges.model";
+import {Balance} from "../../model/entities/balance.model";
 
 @Injectable({
     scope: Scope.REQUEST
@@ -17,22 +21,30 @@ export class InitialPaymentState extends AbstractPaymentState implements Payment
     constructor(assertPayment: AssertPaymentService,
                 requestStatus: RequestStatusService,
                 httpService: HttpService,
-                repositoryTable: Repository<any>,
-                responseFromPayments: number,
+                transactionRepository: Repository<any>,
+                userRepository: Repository<Users>,
+                chargesRepository: Repository<Charges>,
+                balanceRepository: Repository<Balance>,
+                responseFromExternalPayments: number,
                 responseStatusForSendingToUser: number,
                 messageToSendToUser: string,
                 context: PaymentStateServiceInterface,
+                amount: number,
+                transferCode: string,
                 baseUrl: string) {
         super(assertPayment,
             requestStatus,
             httpService,
-            repositoryTable,
-            responseFromPayments,
+            transactionRepository,
+            userRepository,
+            chargesRepository,
+            balanceRepository,
+            responseFromExternalPayments,
             responseStatusForSendingToUser,
             messageToSendToUser,
             context,
-            0,
-            '',
+            amount,
+            transferCode,
             baseUrl);
     }
     run<T>(transferCode: string, amount: number, token: string): Promise<PaymentResponseInterface> {
@@ -41,6 +53,9 @@ export class InitialPaymentState extends AbstractPaymentState implements Payment
             this.getRequestStatusService(),
             this.getHttpService(),
             this.getTransactionRepository(),
+            this.getUserRepository(),
+            this.getChargesRespitory(),
+            this.getBalanceRepository(),
             this.getResponseStatusFromGeneralPayments(),
             this.getResponseStatusForSendingToUser(),
             this.getMessageForSendingToUser(),

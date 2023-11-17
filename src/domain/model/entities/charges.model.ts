@@ -7,6 +7,9 @@ export class Charges
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @Column({type:"timestamptz"})
+    timestamp: string;
+
     @ManyToOne(() => Users, (user) => user.charges)
     user: Users;
 

@@ -4,6 +4,9 @@ import {RequestStatusService} from "../helpers/request.status.service";
 import {PaymentStateServiceInterface} from "./payment.state.service.interface";
 import {HttpService} from "@nestjs/axios";
 import {Repository} from "typeorm";
+import {Users} from "../../model/entities/user.model";
+import {Balance} from "../../model/entities/balance.model";
+import {Charges} from "../../model/entities/charges.model";
 
 
 export interface PaymentInterface
@@ -20,6 +23,9 @@ export interface PaymentInterface
     getRequestStatusService(): RequestStatusService,
     getHttpService(): HttpService;
     getTransactionRepository(): Repository<any>;
+    getUserRepository(): Repository<Users>
+    getChargesRespitory(): Repository<Charges>;
+    getBalanceRepository(): Repository<Balance>
     getResponseStatusFromGeneralPayments(): number;
     getResponseStatusForSendingToUser(): number;
     getMessageForSendingToUser(): string;

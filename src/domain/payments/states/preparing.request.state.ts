@@ -11,6 +11,9 @@ import {PaymentStatusInterface} from "../factory/interfaces/payment.status.inter
 import {PaymentStateServiceInterface} from "../interfaces/payment.state.service.interface";
 import {HttpService} from "@nestjs/axios";
 import { Repository} from "typeorm";
+import {Users} from "../../model/entities/user.model";
+import {Charges} from "../../model/entities/charges.model";
+import {Balance} from "../../model/entities/balance.model";
 
 @Injectable({scope:Scope.REQUEST})
 export class PreparingRequestState extends AbstractPaymentState implements PaymentInterface
@@ -19,6 +22,9 @@ export class PreparingRequestState extends AbstractPaymentState implements Payme
                 requestStatus: RequestStatusService,
                 httpService: HttpService,
                 transactionRepository: Repository<any>,
+                userRepository: Repository<Users>,
+                chargesRepository: Repository<Charges>,
+                balanceRepository: Repository<Balance>,
                 responseFromExternalPayments: number,
                 responseStatusForSendingToUser: number,
                 messageToSendToUser: string,
@@ -30,6 +36,9 @@ export class PreparingRequestState extends AbstractPaymentState implements Payme
             requestStatus,
             httpService,
             transactionRepository,
+            userRepository,
+            chargesRepository,
+            balanceRepository,
             responseFromExternalPayments,
             responseStatusForSendingToUser,
             messageToSendToUser,
@@ -56,6 +65,9 @@ export class PreparingRequestState extends AbstractPaymentState implements Payme
             this.getRequestStatusService(),
             this.getHttpService(),
             this.getTransactionRepository(),
+            this.getUserRepository(),
+            this.getChargesRespitory(),
+            this.getBalanceRepository(),
             this.getResponseStatusFromGeneralPayments(),
             this.getResponseStatusForSendingToUser(),
             this.getMessageForSendingToUser(),
@@ -70,6 +82,9 @@ export class PreparingRequestState extends AbstractPaymentState implements Payme
             this.getRequestStatusService(),
             this.getHttpService(),
             this.getTransactionRepository(),
+            this.getUserRepository(),
+            this.getChargesRespitory(),
+            this.getBalanceRepository(),
             this.getResponseStatusFromGeneralPayments(),
             this.getResponseStatusForSendingToUser(),
             this.getMessageForSendingToUser(),

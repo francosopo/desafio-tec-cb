@@ -40,9 +40,11 @@ export class UsersService
             let newBalance: Balance = new Balance();
             newBalance.user = newUser;
             newBalance.balance = balance;
+            newBalance.updatedAt = new Date().toISOString();
             let newCharges: Charges = new Charges();
             newCharges.user = newUser;
             newCharges.amount = 0;
+            newCharges.timestamp= new Date().toISOString();
             let newPayment: Payments = new Payments();
             newPayment.user = newUser;
             newPayment.amount = 0;

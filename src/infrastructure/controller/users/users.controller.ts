@@ -54,6 +54,7 @@ export class UsersController
             }
             else
             {
+                console.log(e)
                 res.status(500).json( {
                     status: 500,
                     message: "Internal server error",

@@ -6,6 +6,9 @@ import {PaymentStateServiceInterface} from "../interfaces/payment.state.service.
 import {HttpService} from "@nestjs/axios";
 import { Repository} from "typeorm";
 import {BaseException} from "../../exceptions/base.exception";
+import {Users} from "../../model/entities/user.model";
+import {Charges} from "../../model/entities/charges.model";
+import {Balance} from "../../model/entities/balance.model";
 
 export abstract class AbstractPaymentState implements PaymentInterface
 {
@@ -14,6 +17,9 @@ export abstract class AbstractPaymentState implements PaymentInterface
         private requestStatusService: RequestStatusService,
         private httpService: HttpService,
         private transactionRepository: Repository<any>,
+        private userRepository: Repository<Users>,
+        private chargesRepository: Repository<Charges>,
+        private balanceRespository: Repository<Balance>,
         private responseStatusFromGeneralPayment: number,
     private responseStatusForSendingToUser: number,
     private messageForSendingToUser: string,
@@ -22,6 +28,13 @@ export abstract class AbstractPaymentState implements PaymentInterface
     private transferCode: string,
         private baseUrl: string)
     {}
+
+    getChargesRespitory(): Repository<Charges> {
+        return this.chargesRepository
+    }
+    getBalanceRepository(): Repository<Balance> {
+        return this.balanceRespository
+    }
 
     getHttpService(): HttpService {
         return this.httpService;
@@ -63,6 +76,10 @@ export abstract class AbstractPaymentState implements PaymentInterface
         return this.transactionRepository;
     }
 
+    getUserRepository(): Repository<Users>
+    {
+        return this.userRepository;
+    }
     setMessageForSendingToUser(message: string): void {
         this.messageForSendingToUser = message;
     }

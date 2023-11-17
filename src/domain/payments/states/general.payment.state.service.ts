@@ -12,6 +12,10 @@ import {Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 import {PaymentResponseInterface} from "../interfaces/payment.response.interface";
 import {ErrorWithExternalPayment} from "../../exceptions/error.with.external.payment";
+import {ConfigModule} from "@nestjs/config";
+import {Users} from "../../model/entities/user.model";
+import {Charges} from "../../model/entities/charges.model";
+import {Balance} from "../../model/entities/balance.model";
 
 @Injectable()
 export class GeneralPaymentStateService implements PaymentStateServiceInterface
@@ -21,7 +25,13 @@ export class GeneralPaymentStateService implements PaymentStateServiceInterface
                 private assertPaymentService: AssertPaymentService,
                 private requestStatusService: RequestStatusService,
                 @InjectRepository(PaymentsToGeneralPayment)
-                private transactionTable: Repository<PaymentsToGeneralPayment>) {
+                private transactionTable: Repository<PaymentsToGeneralPayment>,
+                @InjectRepository(Users)
+                private userRepository: Repository<Users>,
+                @InjectRepository(Charges)
+                private chargesRepository: Repository<Charges>,
+                @InjectRepository(Balance)
+                private balanceRepository: Repository<Balance>){
     }
 
     setState(state: PaymentInterface): void {
@@ -33,7 +43,7 @@ export class GeneralPaymentStateService implements PaymentStateServiceInterface
 
     async runTransaction(transferCode: string, amount: number): Promise<PaymentResponseInterface>
     {
-        const url = 'https://dev.developers-test.currencybird.cl/token?email=franco.seguel@ug.uchile.cl';
+        const url = process.env.GET_TOKEN_SERVICE_URL
         let response =(await this.httpService.axiosRef.get(url))
         if (response.status != 200){
             throw new ErrorWithExternalPayment(`Cannot get token from external payment: ${url}`)
@@ -44,10 +54,15 @@ export class GeneralPaymentStateService implements PaymentStateServiceInterface
             this.requestStatusService,
             this.httpService,
             this.transactionTable,
+            this.userRepository,
+            this.chargesRepository,
+            this.balanceRepository,
             0,
             0,
             '',
             this,
+            amount,
+            transferCode,
             process.env.GENERAL_PAYMENT_BASE_URL,
         )
         return this.state.run<GeneralPaymentResponseInterface>(transferCode, amount, token);

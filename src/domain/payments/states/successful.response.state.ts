@@ -5,7 +5,10 @@ import {AssertPaymentService} from "../helpers/assert.payment.service";
 import {RequestStatusService} from "../helpers/request.status.service";
 import {HttpService} from "@nestjs/axios";
 import {PaymentStateServiceInterface} from "../interfaces/payment.state.service.interface";
-import {EntityTarget, Repository} from "typeorm";
+import {Repository} from "typeorm";
+import {Users} from "../../model/entities/user.model";
+import {Charges} from "../../model/entities/charges.model";
+import {Balance} from "../../model/entities/balance.model";
 
 export class SuccessfulResponseState extends AbstractPaymentState implements PaymentInterface
 {
@@ -13,6 +16,9 @@ export class SuccessfulResponseState extends AbstractPaymentState implements Pay
                 requestStatus: RequestStatusService,
                 httpService: HttpService,
                 transactionRepository: Repository<any>,
+                userRepository: Repository<Users>,
+                chargesRepository: Repository<Charges>,
+                balanceRepository: Repository<Balance>,
                 responseFromExternalPayments: number,
                 responseStatusForSendingToUser: number,
                 messageToSendToUser: string,
@@ -24,6 +30,9 @@ export class SuccessfulResponseState extends AbstractPaymentState implements Pay
             requestStatus,
             httpService,
             transactionRepository,
+            userRepository,
+            chargesRepository,
+            balanceRepository,
             responseFromExternalPayments,
             responseStatusForSendingToUser,
             messageToSendToUser,

@@ -7,6 +7,9 @@ import {Injectable, Scope} from "@nestjs/common";
 import {HttpService} from "@nestjs/axios";
 import {PaymentStateServiceInterface} from "../interfaces/payment.state.service.interface";
 import {Repository} from "typeorm";
+import {Users} from "../../model/entities/user.model";
+import {Charges} from "../../model/entities/charges.model";
+import {Balance} from "../../model/entities/balance.model";
 
 @Injectable({
     scope: Scope.REQUEST
@@ -17,7 +20,10 @@ export class WaitResponseState extends AbstractPaymentState implements PaymentIn
                 requestStatus: RequestStatusService,
                 httpService: HttpService,
                 transactionRepository: Repository<any>,
-                responseFromGeneralPayments: number,
+                userRepository: Repository<Users>,
+                chargesRepository: Repository<Charges>,
+                balanceRepository: Repository<Balance>,
+                responseFromExternalPayments: number,
                 responseStatusForSendingToUser: number,
                 messageToSendToUser: string,
                 context: PaymentStateServiceInterface,
@@ -28,7 +34,10 @@ export class WaitResponseState extends AbstractPaymentState implements PaymentIn
             requestStatus,
             httpService,
             transactionRepository,
-            responseFromGeneralPayments,
+            userRepository,
+            chargesRepository,
+            balanceRepository,
+            responseFromExternalPayments,
             responseStatusForSendingToUser,
             messageToSendToUser,
             context,

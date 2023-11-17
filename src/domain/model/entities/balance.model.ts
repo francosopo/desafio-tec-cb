@@ -16,4 +16,7 @@ export class Balance
         default:0
     })
     balance: number;
+
+    @Column({type: "timestamptz"})
+    updatedAt: string
 }
