@@ -43,7 +43,6 @@ POSTGRES_DB=your_database_name
 Then, create a user, a database with the configurations shown above, and grant all privileges on
 the database to the user you created and permit login. 
 
-SET THE POSTGRES LISTENING ADDRESS AS LOCALHOST
 
 Later, set the following configuration into your .env.local
 
