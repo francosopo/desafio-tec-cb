@@ -26,6 +26,16 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+This app is meant to be used as a gateway for sending a payment to an external service.
+
+This application uses the following design patterns:
+    - Composite
+    - Null Object
+    - Factory
+    - State
+
+Besides, this application uses Clean architecture: domain, infrastructure and usecases
+
 ## Installation
 
 1.-Install PostgreSQL with version 16
