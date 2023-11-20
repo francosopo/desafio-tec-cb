@@ -34,7 +34,7 @@ This application uses the following design patterns:
     - Factory
     - State
 
-Besides, this application uses Clean architecture: domain, infrastructure and usecases
+Besides, this application implements Clean architecture: domain, infrastructure and usecases
 
 ## Installation
 
@@ -62,9 +62,13 @@ HASHING_SALT=your_hashing_salt
 SIGNUP_HEADER=THIS_IS_THE_SIGNUP_HEADDER_D
 X_GENERAL_PAYMENT=MAKE-GENERAL-PAYMENT
 ```
+Then, clone this repo:
 
+[Payment application](https://github.com/francosopo/payment_repository)
 
-Then, run
+And run it. That repository acts like a payment provider.
+
+Finally, run
 
 ```bash
 $ npm install
