@@ -59,9 +59,9 @@ Later, set the following configuration into your .env.local
 ```editorconfig
 GENERAL_PAYMENT_BASE_URL=http://the.url.to.your.payment.com
 HASHING_SALT=your_hashing_salt
+SIGNUP_HEADER=THIS_IS_THE_SIGNUP_HEADDER_D
+X_GENERAL_PAYMENT=MAKE-GENERAL-PAYMENT
 ```
-
-Next, add the header config to the .env.local file as I told you in the email.
 
 
 Then, run

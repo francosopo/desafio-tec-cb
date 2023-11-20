@@ -16,7 +16,7 @@ export class GeneralPaymentController
     async doPayment(@Headers() generalPaymentHeaders: GeneralPaymentHeaders, @Body() bodyDTO: GeneralPaymentBodyDTO, @Res() res: Response): Promise<PaymentResponseInterface>
     {
         try{
-            if (generalPaymentHeaders.x_general_payment != 'MAKE-GENERAL-PAYMENT')
+            if (generalPaymentHeaders.x_general_payment != process.env.X_GENERAL_PAYMENT)
             {
                 res.status(403).json({
                     transferCode: bodyDTO.transferCode,
